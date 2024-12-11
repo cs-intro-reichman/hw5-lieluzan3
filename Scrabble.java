@@ -61,21 +61,20 @@ public class Scrabble {
 	// If the length of the word equals the length of the hand, adds 50 points to the score.
 	// If the word includes the sequence "runi", adds 1000 points to the game.
 	public static int wordScore(String word) {
-		int score = 0;
-
-		for (int i = 0; i < word.length(); i++) {
-			char c = word.charAt(i);
-			score += SCRABBLE_LETTER_VALUES[c - 'a'];
+		
+			word = word.toLowerCase(); 
+		
+			int score = 0;
+		for(int i=0; i<word.length(); i++){
+			score += SCRABBLE_LETTER_VALUES[(word.charAt(i)-'a')];
 		}
-	
-		if (word.length() == HAND_SIZE) {
-			score += 50;
+		score*=word.length();
+		if(word.length() == HAND_SIZE){
+			score +=50;
 		}
-	
-		if (word.contains("runi")) {
-			score += 1000;
+		if(MyString.subsetOf("runi", word)){
+			score+=1000;
 		}
-	
 		return score;
 	}
 	
@@ -150,10 +149,10 @@ public class Scrabble {
 	public static void main(String[] args) {
 		
 		//testBuildingTheDictionary();  
-		//testScrabbleScore();    
+		testScrabbleScore();    
 		//testCreateHands();  
 		//testPlayHands();
-		playGame();
+		//playGame();
 	}
 
 	public static void testBuildingTheDictionary() {
