@@ -94,37 +94,43 @@ public class Scrabble {
 		return alphabet[randomIndex];
 	}		
 	
-    // Runs a single hand in a Scrabble game. Each time the user enters a valid word:
-    // 1. The letters in the word are removed from the hand, which becomes smaller.
-    // 2. The user gets the Scrabble points of the entered word.
-    // 3. The user is prompted to enter another word, or '.' to end the hand. 
+    
 	public static void playHand(String hand) {
+		int n = hand.length();
 		int score = 0;
-        In in = new In();
-        while (hand.length() > 0) {
-            System.out.println("Current Hand: " + MyString.spacedString(hand));
-            System.out.println("Enter a word, or '.' to finish playing this hand:");
-            String input = in.readString();
-
-            if (input.equals(".")) {
-                break;  // יציאה מהיד אם הקלט הוא נקודה
-            }
-
-            if (isWordInDictionary(input) && MyString.subsetOf(input, hand)) {
-                int wordScore = wordScore(input);
-                score += wordScore;
-                System.out.println("You scored " + wordScore + " points for the word " + input);
-                hand = MyString.remove(hand, input);  // מסיר את התווים של המילה מהיד
-            } else {
-                System.out.println("Invalid word. Please try again.");
-            }
-        }
-        if (hand.length() == 0) {
-            System.out.println("Ran out of letters. Total score: " + score + " points");
-        } else {
-            System.out.println("End of hand. Total score: " + score + " points");
-        }
-    }
+		int scorenow=0;
+	
+		In in = new In();
+		while (hand.length() > 0) {
+			System.out.println("Current Hand: " + MyString.spacedString(hand));
+			System.out.println("Enter a word, or '.' to finish playing this hand:");
+			
+			String input = in.readString();
+			if(input.equals(".")){
+				break;
+			}
+			if(MyString.subsetOf(input, hand) && isWordInDictionary(input)){
+				scorenow = Scrabble.wordScore(input);
+				score +=scorenow;
+				hand = MyString.remove(hand, input);
+				HAND_SIZE -=input.length();		
+				System.out.println(input + " earned " + scorenow + " points. Score: " +score + " points");
+				System.out.println();
+			}
+			else if(!isWordInDictionary(input)){
+				
+				System.out.println("Invalid word. Try again.");
+			}
+			else if(!MyString.subsetOf(input, hand)){
+				System.out.println("No such word in the dictionary. Try again.");
+			}
+		}
+		if (hand.length() == 0) {
+	        System.out.println("Ran out of letters. Total score: " + score + " points");
+		} else {
+			System.out.println("End of hand. Total score: " + score + " points");
+		}
+	}
 
 	// Plays a Scrabble game. Prompts the user to enter 'n' for playing a new hand, or 'e'
 	// to end the game. If the user enters any other input, writes an error message.
